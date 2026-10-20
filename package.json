@@ -62,7 +62,7 @@
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.23.15",
-    "typescript": "^5",
+    "typescript": "^7",
     "vitest": "^3.2.7"
   },
   "description": "HWC survey monitoring dashboard (Next.js)",
