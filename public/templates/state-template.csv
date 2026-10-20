@@ -1,0 +1,4 @@
+category,indicator name,value,unit,target,previous value,status,trend,district_name,date
+Maternal health,Maternal mortality ratio,103,per 100000,70,110,bad,down,North,2024-03-31
+Maternal health,Maternal mortality ratio,96,per 100000,70,101,bad,down,South,2024-03-31
+Immunization,Full immunization coverage,82,%,90,79,neutral,up,North,2024-03-31

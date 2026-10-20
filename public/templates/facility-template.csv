@@ -1,0 +1,4 @@
+category,indicator name,value,unit,target,previous value,status,trend,date,notes
+Maternal health,Institutional deliveries,91,%,95,88,good,up,2024-03-31,Quarterly HMIS return
+Maternal health,Antenatal care registrations,412,women,450,398,neutral,up,2024-03-31,
+Facility performance,Average OPD wait time,24,min,20,22,bad,up,2024-03-31,Peak hours 10:00-12:00

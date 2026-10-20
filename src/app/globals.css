@@ -1,0 +1,376 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens. Colours are HSL triplets so Tailwind can apply alpha
+ * (`bg-card/60`). Text/background pairs are chosen for WCAG AA (>= 4.5:1).
+ */
+@layer base {
+  :root {
+    --background: 210 40% 97%;
+    --foreground: 224 40% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 40% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 40% 10%;
+
+    --primary: 174 84% 24%;
+    --primary-foreground: 0 0% 100%;
+    --brand: 262 62% 48%;
+
+    --secondary: 220 30% 92%;
+    --secondary-foreground: 224 40% 16%;
+    --muted: 220 25% 93%;
+    --muted-foreground: 220 14% 35%;
+    --accent: 174 45% 91%;
+    --accent-foreground: 174 84% 17%;
+
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 62% 24%;
+    --warning: 30 92% 28%;
+    --info: 213 78% 36%;
+
+    --border: 220 20% 84%;
+    --input: 220 20% 80%;
+    --ring: 174 84% 30%;
+
+    --chart-1: 174 72% 32%;
+    --chart-2: 262 58% 54%;
+    --chart-3: 36 92% 46%;
+    --chart-4: 204 80% 42%;
+    --chart-5: 340 72% 52%;
+
+    --glass-border: 0 0% 100%;
+    --glass-shadow: 224 40% 20%;
+    --radius: 0.875rem;
+
+    --mesh-a: 174 80% 60%;
+    --mesh-b: 262 80% 72%;
+    --mesh-c: 204 90% 70%;
+    --mesh-opacity: 0.45;
+  }
+
+  .dark {
+    --background: 226 40% 6%;
+    --foreground: 210 40% 96%;
+
+    --card: 226 32% 13%;
+    --card-foreground: 210 40% 96%;
+    --popover: 226 34% 11%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 172 66% 50%;
+    --primary-foreground: 226 45% 7%;
+    --brand: 262 90% 78%;
+
+    --secondary: 226 26% 18%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 226 26% 17%;
+    --muted-foreground: 215 20% 72%;
+    --accent: 172 40% 18%;
+    --accent-foreground: 172 70% 82%;
+
+    --destructive: 0 84% 66%;
+    --destructive-foreground: 226 45% 7%;
+    --success: 152 65% 62%;
+    --warning: 38 95% 64%;
+    --info: 205 90% 72%;
+
+    --border: 222 24% 24%;
+    --input: 222 24% 28%;
+    --ring: 172 66% 56%;
+
+    --chart-1: 172 66% 56%;
+    --chart-2: 262 90% 78%;
+    --chart-3: 38 95% 62%;
+    --chart-4: 204 90% 68%;
+    --chart-5: 340 90% 72%;
+
+    --glass-border: 210 40% 100%;
+    --glass-shadow: 226 60% 2%;
+
+    --mesh-a: 172 80% 40%;
+    --mesh-b: 262 80% 50%;
+    --mesh-c: 214 90% 48%;
+    --mesh-opacity: 0.35;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.28);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* Translucent, blurred surface with a subtle top highlight. */
+  .glass {
+    background:
+      linear-gradient(135deg, hsl(var(--glass-border) / 0.16), hsl(var(--glass-border) / 0.02) 60%),
+      hsl(var(--card) / 0.62);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    backdrop-filter: blur(18px) saturate(1.5);
+    border: 1px solid hsl(var(--glass-border) / 0.45);
+    box-shadow:
+      0 1px 0 0 hsl(var(--glass-border) / 0.5) inset,
+      0 18px 40px -22px hsl(var(--glass-shadow) / 0.35);
+  }
+
+  .dark .glass {
+    border-color: hsl(var(--glass-border) / 0.1);
+    box-shadow:
+      0 1px 0 0 hsl(var(--glass-border) / 0.08) inset,
+      0 20px 44px -24px hsl(var(--glass-shadow) / 0.9);
+  }
+
+  .glass-strong {
+    background: hsl(var(--card) / 0.82);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    backdrop-filter: blur(24px) saturate(1.6);
+    border: 1px solid hsl(var(--glass-border) / 0.5);
+  }
+
+  .dark .glass-strong {
+    border-color: hsl(var(--glass-border) / 0.12);
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(100deg, hsl(var(--primary)), hsl(var(--brand)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-brand-gradient {
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--brand)));
+  }
+
+  /* Gradient hairline border that sits on top of a rounded surface. */
+  .gradient-ring {
+    position: relative;
+  }
+  .gradient-ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.7), transparent 40%, hsl(var(--brand) / 0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Animated mesh gradient behind the whole app (pure CSS, GPU transforms). */
+  .mesh-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: hsl(var(--background));
+  }
+  .mesh-blob {
+    position: absolute;
+    width: 56vmax;
+    height: 56vmax;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: var(--mesh-opacity);
+    will-change: transform;
+  }
+  .mesh-blob--a {
+    top: -22vmax;
+    left: -14vmax;
+    background: radial-gradient(circle at 30% 30%, hsl(var(--mesh-a)), transparent 65%);
+    animation: mesh-drift-a 32s ease-in-out infinite alternate;
+  }
+  .mesh-blob--b {
+    top: 8vmax;
+    right: -24vmax;
+    background: radial-gradient(circle at 60% 40%, hsl(var(--mesh-b)), transparent 65%);
+    animation: mesh-drift-b 38s ease-in-out infinite alternate;
+  }
+  .mesh-blob--c {
+    bottom: -30vmax;
+    left: 18vw;
+    background: radial-gradient(circle at 50% 50%, hsl(var(--mesh-c)), transparent 65%);
+    animation: mesh-drift-c 44s ease-in-out infinite alternate;
+  }
+  .mesh-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background-image: radial-gradient(hsl(var(--foreground) / 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%);
+    mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 72%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mesh-blob {
+      animation: none;
+    }
+  }
+
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .skeleton-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.07), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer::after {
+      animation: none;
+    }
+  }
+
+  /* CSS-only 3D orb used as the hero poster and as the no-WebGL fallback. */
+  .orb {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at 32% 28%, hsl(0 0% 100% / 0.55), transparent 32%),
+      radial-gradient(circle at 70% 75%, hsl(var(--brand) / 0.55), transparent 55%),
+      radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.85), hsl(var(--primary) / 0.25) 70%);
+    box-shadow:
+      inset -18px -24px 60px hsl(var(--brand) / 0.35),
+      0 30px 80px -20px hsl(var(--primary) / 0.5);
+    animation: orb-float 9s ease-in-out infinite;
+  }
+  .orb::before,
+  .orb::after {
+    content: '';
+    position: absolute;
+    inset: -9%;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--primary) / 0.45);
+    transform: rotateX(72deg) rotateZ(0deg);
+    animation: orb-spin 16s linear infinite;
+  }
+  .orb::after {
+    inset: -22%;
+    border-color: hsl(var(--brand) / 0.4);
+    transform: rotateX(72deg) rotateZ(40deg);
+    animation-duration: 24s;
+    animation-direction: reverse;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .orb,
+    .orb::before,
+    .orb::after {
+      animation: none;
+    }
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@keyframes mesh-drift-a {
+  to {
+    transform: translate3d(10vmax, 8vmax, 0) scale(1.15);
+  }
+}
+@keyframes mesh-drift-b {
+  to {
+    transform: translate3d(-12vmax, 10vmax, 0) scale(0.9);
+  }
+}
+@keyframes mesh-drift-c {
+  to {
+    transform: translate3d(-8vmax, -10vmax, 0) scale(1.2);
+  }
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes orb-float {
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes orb-spin {
+  to {
+    transform: rotateX(72deg) rotateZ(360deg);
+  }
+}
+
+/* Printing (executive brief and any dashboard view): plain, high-contrast, no chrome. */
+@media print {
+  header[class*='glass'],
+  footer,
+  .mesh-bg,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .glass,
+  .glass-strong {
+    background: #fff !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: 1px solid #d4d4d8 !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}

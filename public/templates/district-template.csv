@@ -1,0 +1,4 @@
+category,indicator name,value,unit,target,previous value,status,trend,facility_id,date
+Immunization,DPT3 coverage,78,%,90,75,neutral,up,PHC-001,2024-03-31
+Immunization,DPT3 coverage,84,%,90,80,neutral,up,PHC-002,2024-03-31
+NCD,Hypertension control rate,45,%,60,42,neutral,up,PHC-001,2024-03-31

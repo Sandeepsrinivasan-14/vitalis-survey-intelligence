@@ -1,0 +1,4 @@
+unique_id,state,district,facility_code,collector_id,date,gender,age,systolic,diastolic,salt_g,bmi,smoker
+EX-0001,Northvale,Ashgrove,NV01-01,1,2026-05-04,female,42,128,82,7.4,26.1,no
+EX-0002,Northvale,Ashgrove,NV01-01,1,2026-05-04,male,57,146,94,10.2,29.4,yes
+EX-0003,Northvale,Ashgrove,NV01-02,2,2026-05-05,transgender,33,116,74,5.9,23.0,no

@@ -1,0 +1,4 @@
+module,parameter_name,value,unit,timestamp
+Storage,Last backup,Online,,2024-03-31 02:00
+Storage,Backup size,18.4,GB,2024-03-31 02:00
+Access,Active users,42,users,2024-03-31 09:15
