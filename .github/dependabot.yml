@@ -10,10 +10,6 @@ updates:
       radix-ui:
         patterns:
           - "@radix-ui/*"
-      genkit:
-        patterns:
-          - "genkit*"
-          - "@genkit-ai/*"
       testing:
         patterns:
           - "vitest"

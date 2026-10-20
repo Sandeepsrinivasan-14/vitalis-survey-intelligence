@@ -35,16 +35,11 @@ export function StatusDonut({ summary }: { summary: DashboardSummary }) {
 
   return (
     <div className="flex flex-col items-center gap-5 sm:flex-row">
-      <div className="relative">
-        <ChartContainer
-          config={statusConfig}
-          className="aspect-square h-[190px] w-[190px]"
-          role="img"
-          aria-label={`Indicator status breakdown. ${description}`}
-        >
-          <PieChart>
+      <div className="relative" role="img" aria-label={`Indicator status breakdown. ${description}`}>
+        <ChartContainer config={statusConfig} className="aspect-square h-[190px] w-[190px]" aria-hidden="true">
+          <PieChart accessibilityLayer={false}>
             <ChartTooltip content={<ChartTooltipContent hideLabel nameKey="key" />} />
-            <Pie data={data} dataKey="value" nameKey="key" innerRadius="64%" outerRadius="94%" paddingAngle={data.length > 1 ? 3 : 0} cornerRadius={6} stroke="none">
+            <Pie rootTabIndex={-1} data={data} dataKey="value" nameKey="key" innerRadius="64%" outerRadius="94%" paddingAngle={data.length > 1 ? 3 : 0} cornerRadius={6} stroke="none">
               {data.map((d) => (
                 <Cell key={d.key} fill={d.fill} />
               ))}

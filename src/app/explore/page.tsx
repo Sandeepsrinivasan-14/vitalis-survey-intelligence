@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { FlaskConical } from 'lucide-react';
 import { FiltersBar } from '@/components/explore/filters-bar';
 import { isTab, TabsNav, type TabId } from '@/components/explore/tabs-nav';
+import { CoverageTab } from '@/components/explore/tabs/coverage';
 import { ClinicalTab } from '@/components/explore/tabs/clinical';
 import { FieldworkTab } from '@/components/explore/tabs/fieldwork';
 import { OverviewTab } from '@/components/explore/tabs/overview';
@@ -59,6 +60,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
       <div id="panel" role="region" aria-label={tab}>
         {tab === 'overview' && <OverviewTab view={view} />}
         {tab === 'fieldwork' && <FieldworkTab view={view} />}
+        {tab === 'coverage' && <CoverageTab view={view} />}
         {tab === 'quality' && <QualityTab view={view} />}
         {tab === 'clinical' && <ClinicalTab view={view} />}
         {tab === 'records' && <RecordsTab view={view} params={{ q: first(params.q), sort: first(params.sort), dir: first(params.dir), page: first(params.page) }} />}

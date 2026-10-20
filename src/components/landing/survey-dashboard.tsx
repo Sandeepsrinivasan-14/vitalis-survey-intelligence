@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { AnimatedNumber } from '@/components/motion/animated-number';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion/reveal';
+import { CoverageSection } from '@/components/landing/coverage-section';
 import { DistrictGenderBars, GenderDonut, genderChartConfig } from '@/components/landing/survey-charts';
 import {
   hwcDistrictMockData,
@@ -192,6 +193,8 @@ export function SurveyDashboard() {
           </div>
         </div>
       </section>
+
+      <CoverageSection />
 
       <section aria-labelledby="phc-title">
         <Reveal>

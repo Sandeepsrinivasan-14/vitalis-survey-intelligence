@@ -56,3 +56,18 @@ export function getAiRateLimiter(): RateLimiter {
   }
   return globalForLimiter.__aiLimiter;
 }
+
+const globalForExport = globalThis as unknown as { __exportLimiter?: RateLimiter };
+
+/** Limiter for the public CSV download: 20 downloads per minute per client. */
+export function getExportRateLimiter(): RateLimiter {
+  if (!globalForExport.__exportLimiter) {
+    globalForExport.__exportLimiter = createRateLimiter({ limit: 20, windowMs: 60_000 });
+  }
+  return globalForExport.__exportLimiter;
+}
+
+/** Best-effort client key from proxy headers. Only meaningful behind a proxy you control. */
+export function clientKey(headers: Headers): string {
+  return headers.get('x-forwarded-for')?.split(',')[0]?.trim() || headers.get('x-real-ip') || 'unknown';
+}

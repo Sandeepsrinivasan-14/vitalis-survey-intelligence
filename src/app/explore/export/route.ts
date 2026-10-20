@@ -1,8 +1,16 @@
+import { clientKey, getExportRateLimiter } from '@/lib/rate-limit';
 import { recordsToCsv } from '@/lib/survey/csv';
 import { loadView } from '@/lib/survey/view';
 
 /** Downloads the records matching the current filters. `?set=raw` includes duplicates and flagged rows. */
 export function GET(request: Request) {
+  const limit = getExportRateLimiter().check(clientKey(request.headers));
+  if (!limit.ok) {
+    return new Response('Too many downloads. Please wait a moment and try again.', {
+      status: 429,
+      headers: { 'Retry-After': String(Math.ceil(limit.retryAfterMs / 1000)), 'Cache-Control': 'no-store' },
+    });
+  }
   const url = new URL(request.url);
   const params: Record<string, string> = {};
   url.searchParams.forEach((value, key) => {

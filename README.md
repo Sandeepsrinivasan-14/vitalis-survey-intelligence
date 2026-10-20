@@ -21,6 +21,10 @@ they can still be fixed, and see how blood pressure and salt intake vary across 
 | ------------------------------------------------------ | -------------------------------------------------------- |
 | ![Salt and blood pressure](docs/screenshots/clinical-dark.webp) | ![Mobile overview](docs/screenshots/mobile-overview.webp) |
 
+| Patient coverage |
+| :--- |
+| ![Patient coverage](docs/screenshots/coverage.webp) |
+
 ## What it does
 
 **Survey explorer** (`/explore`, public) with filters for state, district, gender and date range that live in the URL,
@@ -29,6 +33,9 @@ so any view can be shared as a link.
 - **Overview**: headline KPIs, gender split, age profile and a ranked list of alerts.
 - **Fieldwork**: cumulative enrolment against plan with a projected finish from the last two weeks of pace, a status
   for every district, facilities that have gone quiet, and a collector leaderboard.
+- **Coverage**: eligible population on facility registers against patients recorded, as a rate with a progress bar by
+  overall, gender, district and facility. Under-represented groups and low-coverage facilities are flagged, and a
+  missing population is reported as "cannot be determined" instead of a misleading 0%.
 - **Data quality**: duplicates, missing values, implausible values, future dates and inconsistent blood pressure,
   counted by type and by district, plus field completeness.
 - **Collector integrity signals**: last-digit preference in blood-pressure readings, suspiciously uniform answers and
@@ -136,7 +143,7 @@ The old duplicate role routes (`/district-officer`, `/facility-manager`, `/state
 
 ## Uploading data
 
-Each dashboard accepts `.csv`, `.xlsx` and `.xls` files up to 10 MB. Download a starter file from the **CSV template**
+Each dashboard accepts `.csv` and `.xlsx` files up to 10 MB. Download a starter file from the **CSV template**
 button (served from `public/templates/<role>-template.csv`). Columns are matched case-insensitively with per-role
 synonyms (`src/lib/uploads/transform.ts`, `profiles.ts`); the core columns are `category`, `indicator name`, `value`,
 `unit`, `target`, `previous value`, `status`, `trend` and `date`. Rows that cannot be read are skipped with a notice. Data is parsed in the browser and
@@ -166,7 +173,6 @@ kept in memory only.
 | `npm run ci`                         | lint + typecheck + tests + build, the same gates as CI          |
 | `npm run setup:env`                  | Generate a local `.env.local` with dev accounts                 |
 | `npm run hash-password -- "<pass>"`  | Print an scrypt hash for an `AUTH_USERS` entry                  |
-| `npm run genkit:dev`                 | Genkit developer UI for the AI flow                             |
 
 ## Project structure
 
@@ -177,7 +183,7 @@ kept in memory only.
 ├── public/templates/           CSV upload templates per role
 ├── scripts/                    setup-env.ts, hash-password.ts
 ├── src/
-│   ├── ai/                     Genkit setup and the analyze-health-trends flow
+│   ├── ai/                     Gemini REST client and the analyze-health-trends flow
 │   ├── app/
 │   │   ├── page.tsx            Public landing page (/)
 │   │   ├── explore/            Survey explorer (/explore), CSV export and printable brief
@@ -222,6 +228,15 @@ production build, plus an `npm audit` job. Dependabot opens weekly update PRs fo
 
 ## Deployment
 
+A multi-stage `Dockerfile` (non-root user, standalone Next.js output, health check on `/api/health`) is included:
+
+```bash
+docker build -t vitalis .
+docker run -p 3000:3000 -e AUTH_SECRET=... -e AUTH_USERS='[...]' vitalis
+```
+
+Or, on any Node.js host:
+
 Any platform that runs Node.js works (Vercel, Firebase App Hosting, Docker, a VM). Set `AUTH_SECRET`, `AUTH_USERS`,
 `NEXT_PUBLIC_SITE_URL` and optionally `GEMINI_API_KEY`, then build with `npm run build`.
 
@@ -243,6 +258,7 @@ Serve over HTTPS in production: the session cookie is marked `Secure`.
 - The clinical roles share one sample dataset; the IT role has its own system sample.
 - The collector signals (rounded readings, uniform answers, unusual pace) are screening prompts. Honest teams can trip
   them, so they point a supervisor at where to look rather than finding anyone at fault.
-- The `xlsx` (SheetJS) package on npm (0.18.5) has known advisories and no fixed npm release. It is only used in the
-  browser by the role-dashboard uploader to read a file the signed-in user chooses; replace it before accepting files
-  from untrusted sources. `npm audit` also reports advisories in transitive Firebase and Genkit dependencies.
+- `npm audit --omit=dev` reports two advisories in PostCSS vendored inside Next.js (build-time CSS handling). They clear
+  when Next.js updates it. See `SECURITY.md` for the full list of limitations.
+- Excel upload reads `.xlsx` only; legacy `.xls` files should be saved as `.xlsx` or CSV first.
+- AI analysis calls the Gemini REST API directly with schema-validated output; without a key a rule-based summary is used.

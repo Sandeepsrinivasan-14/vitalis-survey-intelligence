@@ -42,9 +42,8 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   turbopack: { root: path.resolve(__dirname) },
   poweredByHeader: false,
-  // Genkit pulls in OpenTelemetry with optional exporters; load it from node_modules at
-  // runtime instead of bundling it (avoids spurious "module not found" build warnings).
-  serverExternalPackages: ['genkit', '@genkit-ai/core', '@genkit-ai/googleai'],
+  // Self-contained server bundle for the Docker image.
+  output: 'standalone',
   async redirects() {
     // The four role pages used to live at top-level paths; they were older
     // copies of the canonical dashboards and are now permanent redirects.

@@ -27,6 +27,7 @@ describe('buildBriefing', () => {
     expect(a.points.some((p) => p.includes('Fairhaven'))).toBe(true);
     expect(a.points.some((p) => /duplicate IDs/.test(p))).toBe(true);
     expect(a.points.some((p) => /Spot-check/.test(p))).toBe(true);
+    expect(a.points.some((p) => /^Coverage:/.test(p))).toBe(true);
   });
   it('speaks only about the chosen scope', () => {
     const text = buildBriefing(loadView({ state: 'Northvale' })).points.join(' ');

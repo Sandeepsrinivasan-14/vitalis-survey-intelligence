@@ -1,4 +1,5 @@
 import { buildAlerts } from './alerts';
+import { buildCoverage } from './coverage';
 import { collectorStats } from './collectors';
 import { formatDate } from './dates';
 import { buildForecast, districtProgress } from './progress';
@@ -49,6 +50,15 @@ export function buildBriefing(view: ExploreView): Briefing {
   points.push(
     `${quality.cleanRate}% of submitted records pass every quality check; ${quality.byType['duplicate-id'].toLocaleString('en-IN')} duplicate IDs and ${quality.byType['future-date'].toLocaleString('en-IN')} future-dated rows were left out of all figures.`,
   );
+
+  const coverage = buildCoverage(scopeClean, dataset, scope);
+  if (coverage.overall.rate !== null) {
+    const weakest = coverage.byDistrict.filter((d) => d.status === 'low').map((d) => d.name);
+    const gaps = coverage.byGender.filter((g) => g.underRepresented).map((g) => g.gender);
+    points.push(
+      `Coverage: ${coverage.overall.recorded.toLocaleString('en-IN')} of ${coverage.overall.population.toLocaleString('en-IN')} eligible people on facility registers are recorded (${coverage.overall.rate}%).${weakest.length ? ` Lowest in ${list(weakest)}.` : ''}${gaps.length ? ` Under-represented: ${list(gaps)}.` : ''}`,
+    );
+  }
 
   if (collectors.length) {
     points.push(`Spot-check recommended for ${list(collectors.map((c) => c.label))} (unusual data patterns, not proof of error).`);

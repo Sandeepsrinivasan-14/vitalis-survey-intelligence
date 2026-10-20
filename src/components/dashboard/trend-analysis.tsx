@@ -57,7 +57,7 @@ export function TrendAnalysis({ metricsData, sourceFileName }: TrendAnalysisProp
 
     try {
       // The action now expects the direct ServiceCategory[] array.
-      // JSON.stringify will happen inside the action or the Genkit flow.
+      // JSON.stringify will happen inside the server action.
       const result = await getAITrendAnalysis(metricsData, sourceFileName);
 
       if (!result.ok) {

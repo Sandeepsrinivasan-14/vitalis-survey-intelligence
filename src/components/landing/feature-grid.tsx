@@ -1,4 +1,4 @@
-import { AlertTriangle, FileCheck2, HeartPulse, LineChart, Printer, Search } from 'lucide-react';
+import { AlertTriangle, FileCheck2, HeartPulse, LineChart, Printer, Search, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion/reveal';
 
@@ -8,6 +8,12 @@ const FEATURES = [
     body: 'Cumulative enrolment against plan, a projected finish date from the last two weeks of pace, and a status for every district.',
     href: '/explore?tab=fieldwork',
     icon: LineChart,
+  },
+  {
+    title: 'Patient coverage',
+    body: 'How much of each facility\'s eligible population has actually been reached, by district, facility and gender, with under-represented groups flagged.',
+    href: '/explore?tab=coverage',
+    icon: Users,
   },
   {
     title: 'Data-quality centre',

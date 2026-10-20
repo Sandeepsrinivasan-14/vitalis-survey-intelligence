@@ -33,6 +33,7 @@ export function CommandPalette() {
       { id: 'home', label: 'Home', group: 'Go to', href: '/' },
       { id: 'overview', label: 'Survey overview', group: 'Go to', href: '/explore?tab=overview' },
       { id: 'fieldwork', label: 'Fieldwork progress and forecast', group: 'Go to', keywords: 'enrolment collectors burn-up', href: '/explore?tab=fieldwork' },
+      { id: 'coverage', label: 'Patient coverage', group: 'Go to', keywords: 'population register reached rate phc', href: '/explore?tab=coverage' },
       { id: 'quality', label: 'Data quality', group: 'Go to', keywords: 'duplicates missing errors', href: '/explore?tab=quality' },
       { id: 'clinical', label: 'Salt and blood pressure', group: 'Go to', keywords: 'hypertension sodium clinical', href: '/explore?tab=clinical' },
       { id: 'records', label: 'Respondent records', group: 'Go to', keywords: 'table search', href: '/explore?tab=records' },

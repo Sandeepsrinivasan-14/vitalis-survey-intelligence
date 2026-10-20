@@ -25,13 +25,22 @@ describe('Explore page', () => {
     expect(screen.getByText(/every place, facility and respondent here is synthetic/i)).toBeInTheDocument();
     const nav = screen.getByRole('navigation', { name: /survey sections/i });
     expect(within(nav).getByRole('link', { name: 'Overview' })).toHaveAttribute('aria-current', 'page');
-    expect(within(nav).getAllByRole('link')).toHaveLength(6);
+    expect(within(nav).getAllByRole('link')).toHaveLength(7);
     expect(screen.getByRole('heading', { name: /needs attention/i })).toBeInTheDocument();
   });
 
   it('falls back to the overview for an unknown tab', async () => {
     await renderPage({ tab: 'nonsense' });
     expect(screen.getByRole('heading', { name: /who we are reaching/i })).toBeInTheDocument();
+  });
+
+  it('shows patient coverage by district, gender and facility', async () => {
+    await renderPage({ tab: 'coverage' });
+    expect(screen.getByRole('heading', { name: /overall coverage rate/i })).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { name: 'Coverage rate' })).toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { name: 'Fairhaven coverage' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /coverage by gender/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /facilities with low coverage/i })).toBeInTheDocument();
   });
 
   it('shows fieldwork progress, a forecast and the collector leaderboard', async () => {
@@ -105,5 +114,16 @@ describe('CSV export', () => {
     const clean = (await GET(new Request('http://localhost/explore/export')).text()).trim().split('\n').length;
     const raw = (await GET(new Request('http://localhost/explore/export?set=raw')).text()).trim().split('\n').length;
     expect(raw).toBeGreaterThan(clean);
+  });
+});
+
+describe('CSV export rate limit', () => {
+  it('answers 429 with Retry-After once a client downloads too often', async () => {
+    const mk = () => new Request('http://localhost/explore/export', { headers: { 'x-forwarded-for': '203.0.113.9' } });
+    let last = GET(mk());
+    for (let i = 0; i < 25 && last.status === 200; i += 1) last = GET(mk());
+    expect(last.status).toBe(429);
+    expect(Number(last.headers.get('Retry-After'))).toBeGreaterThan(0);
+    expect(GET(new Request('http://localhost/explore/export', { headers: { 'x-forwarded-for': '198.51.100.4' } })).status).toBe(200);
   });
 });

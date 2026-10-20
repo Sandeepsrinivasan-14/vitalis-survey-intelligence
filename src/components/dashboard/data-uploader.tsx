@@ -37,15 +37,13 @@ function parseCsv(file: File): Promise<SheetData> {
 }
 
 async function parseExcel(file: File): Promise<SheetData> {
-  // SheetJS is large; only load it when an Excel file is actually chosen.
-  const XLSX = await import('xlsx');
-  const buffer = await file.arrayBuffer().catch(() => {
-    throw new Error(`Failed to read the Excel file: ${file.name}.`);
+  // Loaded on demand: only when an Excel file is actually chosen. Reads .xlsx only.
+  const { readSheet } = await import('read-excel-file/browser');
+  const rows = await readSheet(file).catch(() => {
+    throw new Error(`Failed to read the Excel file: ${file.name}. Make sure it is a valid .xlsx workbook.`);
   });
-  const workbook = XLSX.read(buffer, { type: 'array' });
-  if (!workbook.SheetNames.length) throw new Error(`Excel file ${file.name} contains no sheets.`);
-  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-  return XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as SheetData;
+  if (!rows.length) throw new Error(`Excel file ${file.name} contains no data in its first sheet.`);
+  return rows.map((row) => row.map((cell) => (cell === null || cell === undefined ? '' : cell instanceof Date ? cell.toISOString().slice(0, 10) : cell))) as SheetData;
 }
 
 export function DataUploader({
@@ -73,11 +71,11 @@ export function DataUploader({
     if (name.endsWith('.csv') || file.type === 'text/csv') {
       type = 'csv';
       rows = await parseCsv(file);
-    } else if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
+    } else if (name.endsWith('.xlsx')) {
       type = 'excel';
       rows = await parseExcel(file);
     } else {
-      throw new Error(`Invalid file type for ${file.name}. Please upload CSV or Excel files.`);
+      throw new Error(`Invalid file type for ${file.name}. Please upload a CSV or .xlsx file.`);
     }
     if (!rows || rows.length === 0) {
       throw new Error(`Uploaded ${type.toUpperCase()} file (${file.name}) is empty or could not be parsed correctly.`);
@@ -162,7 +160,7 @@ export function DataUploader({
           id={inputId}
           type="file"
           multiple
-          accept=".csv,.xlsx,.xls,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           onChange={onChange}
           disabled={isLoading}
           className="sr-only"

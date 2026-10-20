@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 export const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'fieldwork', label: 'Fieldwork' },
+  { id: 'coverage', label: 'Coverage' },
   { id: 'quality', label: 'Data quality' },
   { id: 'clinical', label: 'Salt & blood pressure' },
   { id: 'records', label: 'Records' },

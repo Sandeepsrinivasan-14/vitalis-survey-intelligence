@@ -27,16 +27,11 @@ export function GenderDonut({ counts }: { counts: HwcGenderCounts }) {
   }));
   const total = data.reduce((sum, d) => sum + d.value, 0);
   return (
-    <div className="relative">
-      <ChartContainer
-        config={genderChartConfig}
-        className="mx-auto aspect-square max-h-[260px] w-full"
-        role="img"
-        aria-label={`Gender distribution of ${total} respondents: ${data.map((d) => `${d.name} ${d.value}`).join(', ')}`}
-      >
-        <PieChart>
+    <div className="relative" role="img" aria-label={`Gender distribution of ${total} respondents: ${data.map((d) => `${d.name} ${d.value}`).join(', ')}`}>
+      <ChartContainer config={genderChartConfig} className="mx-auto aspect-square max-h-[260px] w-full" aria-hidden="true">
+        <PieChart accessibilityLayer={false}>
           <ChartTooltip content={<ChartTooltipContent hideLabel nameKey="key" />} />
-          <Pie data={data} dataKey="value" nameKey="key" innerRadius="62%" outerRadius="92%" paddingAngle={3} cornerRadius={6} stroke="none">
+          <Pie rootTabIndex={-1} data={data} dataKey="value" nameKey="key" innerRadius="62%" outerRadius="92%" paddingAngle={3} cornerRadius={6} stroke="none">
             {data.map((d) => (
               <Cell key={d.key} fill={d.fill} />
             ))}
